@@ -12,7 +12,7 @@ This fills a pretty niche need, as plain text cells render extremely fast with t
 npm install [--save] reactable-cacheable
 ```
 
-Raw JS [here][https://github.com/stbly1/reactable-cacheable/raw/master/build/].
+Raw JS [here](https://github.com/stbly1/reactable-cacheable/raw/master/build/).
 
 You'll also need a version of [React (0.14) or later](http://facebook.github.io/react/downloads.html).
 
