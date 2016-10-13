@@ -1,0 +1,44 @@
+{
+  "name": "reactable-cacheable",
+  "version": "0.1.0",
+  "description": "An extension of Glittershark's reactable.js that allows caching of table data for faster sorting and filtering.",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "grunt-http-server": "^2.0.0",
+    "http-server": "^0.9.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-babel": "^5.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-file-append": "0.0.6",
+    "grunt-karma": "^0.8.2",
+    "grunt-react": "^0.10.0",
+    "load-grunt-tasks": "^3.2.0",
+    "reactable": "^0.14.0"
+  },
+  "main": "./lib/reactable-cacheable.js",
+  "scripts": {
+    "start": "./node_modules/grunt-cli/bin/grunt test",
+    "build": "./node_modules/grunt-cli/bin/grunt build"
+
+  },
+  "keywords": [
+    "reactable",
+    "caching",
+    "speed",
+    "filtering",
+    "sorting"
+  ],
+  "author": "Conor Britain",
+  "license": "MIT"
+}
