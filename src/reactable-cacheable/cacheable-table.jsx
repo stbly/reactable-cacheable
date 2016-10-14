@@ -4,7 +4,6 @@ import { extractDataFrom } from './../../node_modules/reactable/lib/reactable/li
 import { isUnsafe } from './../../node_modules/reactable/lib/reactable/unsafe';
 
 import { Table, Thead, Th, Tr, Td, Tfoot, Paginator } from 'reactable'
-import CacheableRow from './cacheable-row'
 
 class CacheableTable extends Table {
     
@@ -15,7 +14,6 @@ class CacheableTable extends Table {
 
     initialize(props) {
         super.initialize(props)
-        
         this.data = this.indexData(this.data)
     }
 
@@ -25,103 +23,6 @@ class CacheableTable extends Table {
                 cacheId: index + 1
             })
         })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        // console.log('componentWillReceiveProps()')
-        // if (this.props.data) {
-        //     console.log('data exists')
-        //     if ( nextProps.data !== this.props.data ) this.resetCache()
-        // } else if (this.props.resetCache) {
-        //     console.log('resetCache property engaged')
-        //     this.resetCache()
-        // } else {
-        //     console.log('not clearing row cache')
-        // }
-        // this.updatedIndexedData( nextProps.data )    
-
-        // console.log('-----------------------')
-        super.componentWillReceiveProps(nextProps)
-    }
-
-    resetCache() {
-        console.log('reset cache')
-        this.rowData = null
-    }
-
-
-    parseChildData(props) {
-        let data = [], tfoot;
-
-        // Transform any children back to a data array
-        if (typeof(props.children) !== 'undefined') {
-            React.Children.forEach(props.children, function(child) {
-                if (typeof(child) === 'undefined' || child === null) {
-                    return;
-                }
-                        
-                switch (child.type) {
-                    case Thead:
-                    break;
-                    case Tfoot:
-                        if (typeof(tfoot) !== 'undefined') {
-                            console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
-                                          'Ignoring all but the last one');
-                        }
-                        tfoot = child;
-                    break;
-                    case CacheableRow:
-                    case Tr:
-                        let childData = child.props.data || {};
-
-                        React.Children.forEach(child.props.children, function(descendant) {
-                            // TODO
-                            /* if (descendant.type.ConvenienceConstructor === Td) { */
-                            if (
-                                typeof(descendant) !== 'object' ||
-                                descendant == null
-                            ) {
-                                return;
-                            } else if (typeof(descendant.props.column) !== 'undefined') {
-                                let value;
-
-                                if (typeof(descendant.props.data) !== 'undefined') {
-                                    value = descendant.props.data;
-                                } else if (typeof(descendant.props.children) !== 'undefined') {
-                                    value = descendant.props.children;
-                                } else {
-                                    console.warn('exports.Td specified without ' +
-                                                 'a `data` property or children, ' +
-                                                 'ignoring');
-                                    return;
-                                }
-
-                                childData[descendant.props.column] = {
-                                    value: value,
-                                    props: filterPropsFrom(descendant.props),
-                                    __reactableMeta: true
-                                };
-                            } else {
-                                console.warn('exports.Td specified without a ' +
-                                             '`column` property, ignoring');
-                            }
-                        });
-
-                        data.push({
-                            data: childData,
-                            props: filterPropsFrom(child.props),
-                            __reactableMeta: true
-                        });
-                    break;
-
-                    default:
-                        console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
-                                      'or one <Tfoot>.');
-                }
-            }.bind(this));
-        }
-
-        return { data, tfoot };
     }
 
     createRows (userColumnsSpecified, columns) {
@@ -179,81 +80,6 @@ class CacheableTable extends Table {
             return []
         }
     }
-/*
-    applyFilter(filter, children) {
-        // Helper function to apply filter text to a list of table rows
-        filter = filter.toLowerCase();
-        let matchedChildren = [];
-
-        return children.map( child => {
-
-            let data = child.props.data;
-
-            for (let filterColumn in this._filterable) {
-                if (typeof(data[filterColumn]) !== 'undefined') {
-                    // Default filter
-                    if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
-                        if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
-                            return child
-                        } else {
-                            return React.cloneElement(child, {style: {display: 'none'}} )
-                        }
-                    } else {
-                        // Apply custom filter
-                        if (this._filterable[filterColumn](extractDataFrom(data, filterColumn).toString(), filter)) {
-                            return child
-                        } else {
-                            return React.cloneElement(child, {style: {display: 'none'}} )
-                        }
-                    }
-                }
-            }
-        })
-    }*/
-    /*
-    applyFilter(filter, children) {
-        // Helper function to apply filter text to a list of table rows
-        filter = filter.toLowerCase();
-        let matchedChildren = [];
-
-        for (let i = 0; i < children.length; i++) {
-            let data = children[i].props.data;
-
-            for (let filterColumn in this._filterable) {
-                var foundColumn = data[filterColumn]
-                if (typeof(foundColumn) !== 'undefined') {
-
-                    console.log(foundColumn)
-                    // Default filter
-                    if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
-                        var extractedData = extractDataFrom(data, filterColumn).toString().toLowerCase()
-                        
-                        
-                        if ( extractedData.indexOf(filter) > -1) {
-                            console.log('case 1', extractedData, filter)
-                            matchedChildren.push(children[i]);
-                            break;
-                        }
-                    } else {
-                        var filterFunction = this._filterable[filterColumn]
-                        var extractedData = extractDataFrom(data, filterColumn).toString()
-                        var functionResult = filterFunction(extractedData, filter)
-                        // Apply custom filter
-
-                        if ( functionResult ) {
-                            console.log('case 2', filterFunction, functionResult)
-                            matchedChildren.push(children[i]);
-                            
-                            console.log('---------------------------')
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return matchedChildren;
-    }*/
 
     render() {
         let children = []

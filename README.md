@@ -1,5 +1,7 @@
 # Reactable Cacheable
 
+<!-- [![Build Status](https://travis-ci.org/stbly/reactable-cacheable.svg?branch=master)](https://travis-ci.org/stbly/reactable-cacheable) -->
+
 A React table building class based on Glittershark's awesome [Reactable](https://github.com/glittershark/reactable), with one key difference: caching of data and rows when sorting. 
 
 I found that, as I started building custom table cells that contained other React components, sorting tables became a slow process, as the rows and their cells were being rebuilt on each sort. Reactable Cacheable saves and indexes the rows after it creates them so that, when no data in the table has changed, React can just use the existing row component instead of creating a whole new one.
